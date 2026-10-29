@@ -1,10 +1,15 @@
 import express from "express";
 import Post from "../model/Post.model.js";
+import upload from "../middleware/upload.js"
 
 const postRouter = express.Router();
 
-postRouter.post("/", async (req, res) => {
-  const post = await Post.create(req.body);
+postRouter.post("/", upload.single("image"), async (req, res) => {
+  const post = await Post.create({
+    userId: req.body.userId,
+    text: req.body.text,
+    image: req.file ? `/uploads/${req.file.filename}` : ""
+  });
 
   res.json({
     message: "Post created successfully",
@@ -32,17 +37,23 @@ postRouter.get("/:id", async (req, res) => {
 });
 
 
-postRouter.put("/:id", async (req, res) => {
+postRouter.put("/:id", upload.single("image"), async (req, res) => {
+  
+  const data = {
+    text: req.body.text
+  };
+
+  if (req.file) {
+    data.image = `/uploads/${req.file.filename}`;
+  }
+  
   const result = await Post.updateOne(
     {
-         _id: req.params.id 
+         _id: req.params.id
     },
-    {
-        text: req.body.text
-    },
-    {
-        image: req.body.image
-    }
+         data
+    
+   
 );
   res.json({
     message: "Post updated successfully",
