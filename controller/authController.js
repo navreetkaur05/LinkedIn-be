@@ -28,9 +28,10 @@ const register = async (req, res) => {
     success: true,
     data: {
       _id: user._id,
-      email: user.email
+      email: user.email,
+      token: generateToken(user._id)
     },
-    token: generateToken(user._id)
+    
   });
 };
 
@@ -39,12 +40,13 @@ const login = async (req, res) => {
 
   const user = await UserModel.findOne({
     email: data.email
-  }).select("+password");
+  });
 
   if (!user) {
     return res.json({
-      message: "Login failed",
-      success: false
+      message: "Email is not registered",
+      success: false,
+      error: "User not exist with this email"
     });
   }
 
@@ -55,8 +57,9 @@ const login = async (req, res) => {
 
   if (!passwordMatch) {
     return res.json({
-      message: "Login failed",
-      success: false
+      message: "Password is wrong",
+      success: false,
+      error: "Password does not matched"
     });
   }
 

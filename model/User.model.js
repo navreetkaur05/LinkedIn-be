@@ -4,33 +4,31 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
-  name: { type: String,},
-   headline: { type: String,},
-    location: { type: String,},
-    profilePhoto: { type: String, },
-    coverPhoto: { type: String, },
+  name: { type: String },
+  headline: { type: String },
+  location: { type: String },
+  profilePhoto: { type: String },
+  coverPhoto: { type: String },
 
-    skills: [String],
+  skills: [String],
 
-     education: [
-      {
-        institution: String,
-        degree: String,
-        startYear: String,
-        endYear: String,
-        cgpa: String
-      }
-    ],
-
-
+  education: [
+    {
+      institution: String,
+      degree: String,
+      startYear: String,
+      endYear: String,
+      cgpa: String,
+    },
+  ],
 });
 
 const UserModel = mongoose.model("users", userSchema);
 
-export default UserModel
+export default UserModel;
